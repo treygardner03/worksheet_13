@@ -9,11 +9,12 @@ Description:
 """
 import numpy as np, pandas as pd, time, tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras import layers
-from tensorflow.keras.optimizers import Adam
+from keras import layers
+from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
-from worksheet_13.coin_data import depth_chart_live, get_coin_price, create_xminute_data
-from tensorflow.keras.callbacks import EarlyStopping
+from fixed_coin_data import depth_chart_live, get_coin_price
+from fixed_predict_coin import create_xminute_data
+from keras.callbacks import EarlyStopping
 
 def create_model(mode='1',coin='btc',model='MLP',in_seq_len='1',out_seq_len='1'):
     global mae

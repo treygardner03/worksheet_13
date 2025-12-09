@@ -1,4 +1,3 @@
-
 #Name: Trey Gardner
 #Worksheet: 13
 #Class CS3080
@@ -25,13 +24,13 @@ def get_coin_price(coin="btc"):
 
 def depth_chart(coin='btc'):
     #Coinbase API URL for order book
-    url = f'https://aip.exchange.coinbase.com/products/{coin.upper()}-USD/book'
+    url = f'https://api.exchange.coinbase.com/products/{coin.upper()}-USD/book'
 
     #Parameters: level=2 for top 50 bids and asks
     params = {'level': 2}
 
     #Send GET request
-    response = response.get(url, params=params)
+    response = requests.get(url, params=params)
 
     if response.status_code == 200:
         order_book = response.json()
@@ -57,11 +56,11 @@ def depth_chart(coin='btc'):
               'Mean Bids Size': df_bids['size'].mean(),
               'Mean Asks Price': df_asks['price'].mean(),
               'Mean Asks Size': df_asks['size'].mean(),
-              'Price after 1min': price
+              'Price After 1min': price
         }#data
 
         df_save = pd.DataFrame(data, index=[0])
-        #append if es
+        #append if exists
         try:
               df_existing = pd.read_csv(f'{coin}_order_book_summary.csv')
               df_save = pd.concat([df_existing, df_save], ignore_index=True)
@@ -92,17 +91,12 @@ def depth_chart_live(coin='btc'):
             df_asks['price'] = df_asks['price'].astype(float)
             df_asks['size'] = df_asks['size'].astype(float)
 
-            #create a list from the means
-            data = [df_bids['price'].mean(), df_asks['price'].mean(), df_bids['size'].mean(), df_asks['size'].mean()]
+            #create a list from the means - FIXED: Only return 2 values to match model
+            data = [df_bids['price'].mean(), df_asks['price'].mean()]
 
             return data
 
 if __name__ == '__main__':
-      coin_choice = input("Enter the coin you want to fetch data for (Default: btc, Other options: eth, shib, etc.): ".strip().lower())
+      coin_choice = input("Enter the coin you want to fetch data for (Default: btc, Other options: eth, shib, etc.): ").strip().lower() or 'btc'
       while True:
             depth_chart(coin_choice)
-
-
-
-
-
